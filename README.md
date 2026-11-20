@@ -2,7 +2,7 @@
 
 Mouse Bluetooth Low Energy (BLE) buatan sendiri berbasis ESP32 dan joystick analog KY-023. Perangkat ini terdeteksi sebagai mouse HID standar di komputer atau HP: joystick menggerakkan kursor, dan menekan joystick berfungsi sebagai klik kiri.
 
-<!-- Tambahkan setelah merekam demo: ![Demo](docs/demo.gif) -->
+![Demo ESP32 BLE Joystick Mouse](docs/demo.gif)
 
 ## Fitur
 
