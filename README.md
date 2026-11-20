@@ -43,8 +43,9 @@ GPIO34 dan GPIO35 adalah pin ADC1 (input-only) yang tetap stabil saat BLE aktif.
 
 ### Kebutuhan
 
-- [Arduino IDE](https://www.arduino.cc/en/software) dengan board package ESP32 terpasang
-- Library `HijelHID_BLEMouse` (tambahkan link sumbernya di sini)
+- [Arduino IDE](https://www.arduino.cc/en/software) dengan board package **arduino-esp32** versi 3.x
+- Library **NimBLE-Arduino** versi 2.3.8 atau lebih baru (dibutuhkan oleh library mouse)
+- Library [HijelHID_BLEMouse](https://github.com/HijelHub/HijelHID_BLEMouse), bisa diinstal lewat Library Manager (cari "HijelHID") atau lewat file ZIP dari GitHub
 
 ### Upload
 
