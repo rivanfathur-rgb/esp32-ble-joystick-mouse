@@ -5,6 +5,7 @@ HijelBLEMouse mouse("ESP32 Mouse", "DIY");
 const int pinVRx = 34;
 const int pinVRy = 35;
 const int pinSW  = 27;
+const int pinScroll = 26; 
 
 int centerX = 2048;
 int centerY = 2048;
@@ -12,6 +13,12 @@ int centerY = 2048;
 const int deadzone = 250;
 const float sensitivity = 0.006;
 const int maxSpeed = 15; // batas kecepatan maksimum per loop, biar ga nyentak
+
+// Pengaturan scroll
+const float scrollSensitivity = 0.0015;
+const int maxScrollTicks = 3;
+const unsigned long scrollIntervalMs = 50;
+unsigned long lastScrollTime = 0;
 
 bool lastButtonState = false;
 
@@ -24,6 +31,7 @@ int clampSpeed(int val) {
 void setup() {
   Serial.begin(115200);
   pinMode(pinSW, INPUT_PULLUP);
+  pinMode(pinScroll, INPUT_PULLUP); 
 
   long sumX = 0, sumY = 0;
   const int samples = 50;
@@ -43,18 +51,35 @@ void loop() {
     int rawX = analogRead(pinVRx);
     int rawY = analogRead(pinVRy);
 
-    // X dan Y ditukar (fix kebalik)
+    // X dan Y ditukar (fix kebalik) 
     int deltaX = -(rawY - centerY);
     int deltaY = rawX - centerX;
 
     if (abs(deltaX) < deadzone) deltaX = 0;
     if (abs(deltaY) < deadzone) deltaY = 0;
 
-    int moveX = clampSpeed((int)(deltaX * sensitivity));
-    int moveY = clampSpeed((int)(deltaY * sensitivity));
+    bool scrollMode = (digitalRead(pinScroll) == LOW); // LOW = tombol scroll dipencet
 
-    if (moveX != 0 || moveY != 0) {
-      mouse.move(moveX, moveY);
+    if (scrollMode) {
+      
+      unsigned long now = millis();
+      if (deltaY != 0 && (now - lastScrollTime) >= scrollIntervalMs) {
+        lastScrollTime = now;
+
+        int ticks = (int)(abs(deltaY) * scrollSensitivity);
+        ticks = constrain(ticks, 1, maxScrollTicks);
+
+       
+        mouse.scroll(deltaY > 0 ? -ticks : ticks); 
+      }
+    } else {
+      
+      int moveX = clampSpeed((int)(deltaX * sensitivity));
+      int moveY = clampSpeed((int)(deltaY * sensitivity));
+
+      if (moveX != 0 || moveY != 0) {
+        mouse.move(moveX, moveY);
+      }
     }
 
     bool pressed = (digitalRead(pinSW) == LOW);
