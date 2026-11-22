@@ -10,8 +10,8 @@ Mouse Bluetooth Low Energy (BLE) buatan sendiri berbasis ESP32 dan joystick anal
 - Kalibrasi titik tengah joystick otomatis saat startup
 - Deadzone untuk mencegah kursor bergeser sendiri
 - Batas kecepatan per loop supaya gerakan halus dan tidak menyentak
-- Klik kiri saat joystick ditekan
-- Mode scroll: tahan tombol scroll lalu gerakkan joystick ke atas/bawah
+- Klik kiri saat joystick ditekan (tahan untuk drag)
+- Mode scroll: tahan tombol scroll lalu gerakkan joystick ke atas/bawah, makin jauh didorong makin cepat
 
 ## Perangkat Keras
 
@@ -30,7 +30,7 @@ Mouse Bluetooth Low Energy (BLE) buatan sendiri berbasis ESP32 dan joystick anal
 | Pin KY-023 | Pin ESP32 | Warna kabel |
 |------------|-----------|-------------|
 | GND | GND | Hitam |
-| +5V | 3V3 (lewat rail + breadboard) | Ungu |
+| +5V (label di modul) | 3V3 (lewat rail + breadboard) | Ungu |
 | SW | GPIO27 (D27) | Kuning |
 | VRx | GPIO34 (D34) | Biru |
 | VRy | GPIO35 (D35) | Hijau |
@@ -42,9 +42,17 @@ Mouse Bluetooth Low Energy (BLE) buatan sendiri berbasis ESP32 dan joystick anal
 
 > **Penting:** beri daya joystick dari **3V3**, bukan 5V. Output analog joystick mengikuti tegangan suplainya, dan pin ADC ESP32 hanya tahan sampai 3,3V.
 
-GPIO34 dan GPIO35 adalah pin ADC1 (input-only) yang tetap stabil saat BLE aktif. Tombol joystick (GPIO27) dan tombol scroll (GPIO26) memakai pull-up internal dan terbaca LOW saat ditekan.
+GPIO34 dan GPIO35 adalah pin ADC1 (input-only) yang tetap stabil saat BLE aktif. Tombol joystick (GPIO27) dan tombol scroll (GPIO26) memakai pull-up internal, jadi terbaca LOW saat ditekan.
 
 <!-- Opsional: tambahkan foto rangkaian: ![Foto rangkaian](docs/foto-rangkaian.jpg) -->
+
+## Cara Kerja
+
+1. Saat booting, 50 sampel pembacaan VRx dan VRy (sekitar 0,5 detik) dirata-rata sebagai titik tengah joystick.
+2. Setelah terhubung lewat Bluetooth, tiap loop (sekitar 8 ms) nilai joystick dikurangi titik tengah. Selisih di bawah `deadzone` dianggap nol.
+3. **Mode normal:** selisih dikali `sensitivity`, dibatasi `maxSpeed`, lalu dikirim sebagai gerakan mouse.
+4. **Mode scroll (tombol scroll ditahan):** kursor diam dan hanya sumbu vertikal yang dipakai, dikirim sebagai tick scroll setiap `scrollIntervalMs`.
+5. Menekan joystick mengirim klik kiri. Ditahan, tombol kiri ikut tertahan sehingga bisa dipakai untuk drag.
 
 ## Perangkat Lunak
 
@@ -67,7 +75,7 @@ GPIO34 dan GPIO35 adalah pin ADC1 (input-only) yang tetap stabil saat BLE aktif.
 2. **Biarkan joystick di posisi tengah (jangan disentuh) saat booting**, karena posisi diamnya dikalibrasi selama sekitar 0,5 detik pertama.
 3. Di komputer atau HP, buka pengaturan Bluetooth lalu pairing dengan **ESP32 Mouse**.
 4. Gerakkan joystick untuk menggerakkan kursor. Tekan joystick untuk klik kiri.
-5. Untuk scroll, **tahan tombol scroll** lalu dorong joystick ke atas atau bawah. Selama tombol ditahan, joystick tidak menggerakkan kursor. Semakin jauh didorong, semakin cepat scroll-nya.
+5. Untuk scroll, **tahan tombol scroll** lalu dorong joystick ke atas atau bawah. Selama tombol ditahan, joystick tidak menggerakkan kursor.
 
 > Sumbu X/Y ditukar di kode agar sesuai orientasi joystick pada rangkaian ini (pin header di sisi kanan). Kalau arah kursor terbalik, ubah baris `deltaX` / `deltaY` di `loop()`.
 
@@ -86,7 +94,8 @@ Ubah konstanta berikut di bagian atas sketch:
 
 ## Pemecahan Masalah
 
-- **Kursor bergeser sendiri:** nyalakan ulang dengan joystick tidak disentuh, atau naikkan `deadzone`.
+- **Kursor bergeser sendiri:** titik tengah hanya dikalibrasi sekali saat booting. Nyalakan ulang dengan joystick tidak disentuh, gunakan sumber daya USB yang stabil, atau naikkan `deadzone`.
+- **Kursor tidak bergerak padahal sudah terhubung:** cek kabel VRx (GPIO34) dan VRy (GPIO35), pastikan joystick mendapat 3V3 dan GND. Cek juga tombol scroll: kalau kakinya terhubung ke GND terus, perangkat terkunci di mode scroll.
 - **Arah gerakan salah:** ubah tanda atau tukar sumbu pada perhitungan `deltaX` / `deltaY`.
 - **Arah scroll terbalik:** tukar tanda pada baris `mouse.scroll(...)` di `loop()`.
 - **Tidak muncul di Bluetooth:** reset board, dan hapus pairing "ESP32 Mouse" lama dari perangkat.
@@ -99,10 +108,11 @@ Ubah konstanta berikut di bagian atas sketch:
 ├── esp32_ble_joystick_mouse/
 │   └── esp32_ble_joystick_mouse.ino
 ├── docs/
+│   ├── demo.gif
 │   └── wiring-diagram.svg
 └── README.md
 ```
 
 ## Lisensi
 
-Tambahkan lisensi (misalnya MIT) lewat **Add file > Create new file > LICENSE** di GitHub.
+Dirilis di bawah lisensi MIT. Lihat berkas `LICENSE`.
