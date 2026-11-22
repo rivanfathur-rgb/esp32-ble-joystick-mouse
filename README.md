@@ -224,6 +224,10 @@ Ubah konstanta berikut di bagian atas sketch:
 
 ---
 
+## Bonus: Scroller 
+
+Selain versi joystick di atas, repo ini juga bawa sketch `Buat_Scroll_Ajah.ino`: ESP32 + tombol yang jadi pengontrol scroll Bluetooth buat HP, supaya layar ga kena minyak waktu tangan lagi dipakai makan. Wiring-nya cuma tombol ke GPIO 4 dan GND, tanpa resistor tambahan. Tombolnya bisa diinjek pakai jempol kaki wkwkwk, tapi itu murni opsional (dan sangat disarankan kakinya bersih). Dibuat pakai library HijelHID_BLEMouse yang sama dengan proyek utama.
+
 <br>
 
 ## <a name="lisensi"></a>Lisensi
