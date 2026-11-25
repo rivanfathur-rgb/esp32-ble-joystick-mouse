@@ -108,12 +108,12 @@ Mouse Bluetooth Low Energy (BLE) buatan sendiri berbasis ESP32 dan joystick anal
 
 ### Kebutuhan
 
-| Kebutuhan | Versi |
-|---|---|
-| [Arduino IDE](https://www.arduino.cc/en/software) | - |
-| Paket board [esp32 by Espressif Systems](https://github.com/espressif/arduino-esp32) (arduino-esp32) | 3.x |
-| [NimBLE-Arduino](https://github.com/h2zero/NimBLE-Arduino) | >= 2.3.8 |
-| [HijelHID_BLEMouse](https://github.com/HijelHub/HijelHID_BLEMouse) | Terbaru |
+| Kebutuhan | Versi minimum | Versi yang diuji |
+|---|---|---|
+| [Arduino IDE](https://www.arduino.cc/en/software) | - | 2.3.11 |
+| Paket board [esp32 by Espressif Systems](https://github.com/espressif/arduino-esp32) (arduino-esp32) | 3.x | 3.3.12 |
+| [NimBLE-Arduino](https://github.com/h2zero/NimBLE-Arduino) | >= 2.3.8 | 2.5.2 |
+| [HijelHID_BLEMouse](https://github.com/HijelHub/HijelHID_BLEMouse) | - | 0.1.0 |
 
 Install paket board lewat `Tools → Board → Boards Manager`, cari "esp32".
 
