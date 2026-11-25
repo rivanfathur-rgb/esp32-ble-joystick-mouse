@@ -20,6 +20,7 @@ Mouse Bluetooth Low Energy (BLE) buatan sendiri berbasis ESP32 dan joystick anal
 * [Konfigurasi](#konfigurasi)
 * [Pemecahan Masalah](#pemecahan-masalah)
 * [Struktur Proyek](#struktur-proyek)
+* [Bonus: Scroller](#bonus-scroller)
 * [Lisensi](#lisensi)
 
 </details>
@@ -227,10 +228,20 @@ Ubah konstanta berikut di bagian atas sketch:
 
 ---
 
-## Bonus: Scroller 
+## <a name="bonus-scroller"></a>Bonus: Scroller
 
-Selain versi joystick di atas, repo ini juga bawa sketch `Buat_Scroll_Ajah.ino`: ESP32 + tombol yang jadi pengontrol scroll Bluetooth buat HP, supaya layar ga kena minyak waktu tangan lagi dipakai makan. Wiring-nya cuma tombol ke GPIO 4 dan GND, tanpa resistor tambahan. Tombolnya bisa diinjek pakai jempol kaki wkwkwk, tapi itu murni opsional (dan sangat disarankan kakinya bersih). Dibuat pakai library HijelHID_BLEMouse yang sama dengan proyek utama.
+Selain versi joystick di atas, repo ini juga berisi sketch `Buat_Scroll_Ajah/Buat_Scroll_Ajah.ino`: ESP32 dan satu tombol yang berfungsi sebagai pengontrol scroll Bluetooth untuk HP, supaya layar tidak kena minyak saat tangan sedang dipakai makan. Dibuat dengan library HijelHID_BLEMouse yang sama dengan proyek utama.
 
+| Pin tombol | Pin ESP32 |
+|---|---|
+| Kaki 1 | GND |
+| Kaki 2 | GPIO4 |
+
+Tidak perlu resistor tambahan. Tombolnya juga bisa ditekan dengan jempol kaki, tapi itu opsional (dan sebaiknya kakinya bersih).
+
+[[Ke atas]](#atas)
+
+---
 <br>
 
 ## <a name="lisensi"></a>Lisensi
